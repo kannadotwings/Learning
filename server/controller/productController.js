@@ -1,5 +1,6 @@
 const models = require("../models");
 const fs = require("fs");
+const path = require("path");
 
 // List with pagination
 const productList = async (req, res) => {
@@ -32,7 +33,7 @@ const productList = async (req, res) => {
 // Add Product
 const productAdd = async (req, res) => {
   try {
-    const imagePaths = req.files.map(file => file.path);
+    const imagePaths = req.files.map(file => file.filename);
 
     const created = await models.product.create({
       ...req.body,
@@ -92,20 +93,32 @@ const productEdit = async (req, res) => {
       });
     }
 
-    if (req.files.length > 0) {
-      const oldImages = JSON.parse(req.body.removedImages || '[]');
-      oldImages.forEach(img => {
-        if (fs.existsSync(img)) {
-          fs.unlinkSync(img);
+    // Delete removed images if provided
+    if (req.body.removedImages) {
+      const removedImages = JSON.parse(req.body.removedImages || '[]');
+      removedImages.forEach(img => {
+        const filePath = path.join('uploads/products/', img);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
         }
       });
+
+      // Remove deleted images from existing ones
+      const currentImages = JSON.parse(item.image || '[]');
+      const filteredImages = currentImages.filter(img => !removedImages.includes(img));
+      item.image = JSON.stringify(filteredImages);
     }
 
-    const imagePaths = req.files.length > 0 ? req.files.map(file => file.path) : JSON.parse(item.image || '[]');
-
+    // Handle new image uploads
+    let existingImages = JSON.parse(item.image || '[]');
+    const newImages = req.files && req.files.length > 0 ? req.files.map(file => file.filename) : [];
+    const finalImageList = [...existingImages, ...newImages];
+    console.log("finalImageList", finalImageList);
+    console.log("existingImages", existingImages);
+    console.log("newImages", newImages);
     await item.update({
       ...req.body,
-      image: JSON.stringify(imagePaths)
+      image: JSON.stringify(finalImageList)
     });
 
     return res.status(200).json({

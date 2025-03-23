@@ -107,7 +107,7 @@ const ViewPage = () => {
               {product.images.map((img, index) => (
                 <img
                   key={index}
-                  src={`${IMAGE_URL}/${img}`}
+                  src={`${IMAGE_URL}/products/${img}`}
                   alt={`Product ${index}`}
                   style={{
                     width: "100px",

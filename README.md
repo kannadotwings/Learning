@@ -9,14 +9,13 @@ This project is a full-stack web application built with **React** (frontend) and
 ```
 /client      -> React frontend
 /server      -> Express backend
-/uploads     -> Uploaded images
 README.md
 ```
 
 ## Features
 
 - React frontend with Bootstrap UI
-- Express backend with Sequelize ORM (or Mongoose if MongoDB)
+- Express backend with Sequelize ORM (MySQL)
 - Multer for image uploads
 - Product management (add, edit, view, list)
 - Axios API integration
@@ -26,22 +25,21 @@ README.md
 
 - **Frontend:** React, Axios, Bootstrap, Formik, Yup
 - **Backend:** Node.js, Express, Sequelize
-- **Database:** MySQL / PostgreSQL / MongoDB
+- **Database:** MySQL
 - **Others:** Multer, CORS, Dotenv
 
 ## Setup Instructions
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone https://github.com/kannadotwings/Learning.git
+cd Learning
 ```
 
 ### 2. Backend Setup (Express)
 ```bash
 cd server
 npm install
-cp .env.example .env  # configure DB connection & PORT
 npm run dev           # start Express (e.g., port 5000)
 ```
 
@@ -65,11 +63,11 @@ IMAGE_URL = http://localhost:5000/uploads/products/image.jpg
 
 | Method | Endpoint               | Description               |
 | ------ | ---------------------- | ------------------------- |
-| POST   | `/api/products/create` | Create product            |
-| GET    | `/api/products/:id`    | View product by ID        |
-| PUT    | `/api/products/:id`    | Update product            |
-| GET    | `/api/products`        | List all products         |
-| DELETE | `/api/products/:id`    | Delete product by ID      |
+| POST   | `/v1/products/create`  | Create product            |
+| GET    | `/v1/products/:id`     | View product by ID        |
+| PUT    | `/v1/products/:id`     | Update product            |
+| GET    | `/v1/products`         | List all products         |
+| DELETE | `/v1/products/:id`     | Delete product by ID      |
 
 ## Production Build
 
@@ -77,15 +75,6 @@ IMAGE_URL = http://localhost:5000/uploads/products/image.jpg
 ```bash
 cd client
 npm run build
-```
-
-### Serve React with Express
-Add to `server/index.js`:
-```js
-app.use(express.static(path.join(__dirname, '../client/build')));
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-});
 ```
 
 ## Notes
@@ -96,5 +85,5 @@ app.get('*', (req, res) => {
 
 ## License
 
-MIT License © 2025 Your Name
+MIT License © 2025
 

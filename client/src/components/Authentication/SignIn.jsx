@@ -18,7 +18,7 @@ const SignIn = () => {
   const loginSchema = Yup.object().shape({
     email: Yup.string()
       .email("Wrong email format")
-      .required("Email is required"),
+      .required("User name is required"),
 
     password: Yup.string().required("Password is required"),
   });

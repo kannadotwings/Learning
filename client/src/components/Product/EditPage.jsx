@@ -50,29 +50,34 @@ const EditPage = () => {
     onSubmit: async (values) => {
       setLoading(true);
       const formData = new FormData();
+      
+      // Corrected this part
       for (let i = 0; i < values.imagesNew.length; i++) {
-        formData.append("images", values.images[i]);
+        formData.append("imagesNew", values.imagesNew[i]);
       }
+  
       Object.keys(values).forEach((key) => {
-        if (key !== "images") formData.append(key, values[key]);
+        if (key !== "imagesNew") formData.append(key, values[key]);
       });
+  
       // Append removed images list
       formData.append("removedImages", JSON.stringify(removedImages));
-
+  
       try {
         const res = await editProduct(id, formData);
         if (res.status) {
-          toast.success(res.message || "Product added successfully");
+          toast.success(res.message || "Product updated successfully");
           navigate("/product/list");
           formik.resetForm();
         }
       } catch (error) {
-        toast.error(error?.response?.data?.message || "Failed to add product");
+        toast.error(error?.response?.data?.message || "Failed to update product");
       } finally {
         setLoading(false);
       }
     },
   });
+  
 
   // Fetch view API on mount
   useEffect(() => {
@@ -336,7 +341,7 @@ const EditPage = () => {
                 serverImages?.map((img, idx) => (
                   <div key={idx} className="position-relative m-2">
                     <img
-                      src={`${IMAGE_URL}/${img}`}
+                      src={`${IMAGE_URL}/products/${img}`}
                       alt={`preview-${img}`}
                       width="60"
                       className="p-2 border rounded"
